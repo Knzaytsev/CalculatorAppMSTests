@@ -7,6 +7,40 @@ namespace CalculatorLibTests
     [TestClass]
     public class CalculatorTests
     {
+        [TestCategory("Function")]
+        [DataTestMethod]
+        [DataRow(1, 1)]
+        [DataRow(25.6, 25.6)]
+        [DataRow(-100, -100)]
+        [DataRow(-2.89, -2.89)]
+        [DataRow(0, 0)]
+        public void PressDisplay(double value, double expected)
+        {
+            // Arrange. 
+
+            // Act. 
+            Calculator calculator = new Calculator();
+            calculator.PressDisplay(value);
+            var actual = calculator.Display;
+
+            // Assert. 
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestCategory("Function")]
+        public void PressPlus() { }
+
+        [TestCategory("Function")]
+        public void PressMinus() { }
+
+        [TestCategory("Function")]
+        public void PressMultiply() { }
+
+        [TestCategory("Function")]
+        public void PressDivide() { }
+
+
+
         [TestCategory("InputData")]
         public void PressPlusTwoItem()
         {
