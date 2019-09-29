@@ -27,26 +27,32 @@ namespace CalculatorLibTests
             Assert.AreEqual(expected, actual);
         }
 
+        [TestMethod]
         [TestCategory("Function")]
-        public void PressPlus() { }
+        public void PressPlus()
+        {
+            PressPlusNegativeItemAndZeroItem();
+        }
 
+        [TestMethod]
         [TestCategory("Function")]
         public void PressMinus() { }
 
+        [TestMethod]
         [TestCategory("Function")]
         public void PressMultiply() { }
 
+        [TestMethod]
         [TestCategory("Function")]
         public void PressDivide() { }
 
-
-
+        [TestMethod]
         [TestCategory("InputData")]
-        public void PressPlusTwoItem()
+        public void PressPlusNegativeItemAndZeroItem()
         {
             // Arrange.
-            var value1 = 1;
-            var value2 = 2;
+            var value1 = -2.9;
+            var value2 = 0;
             // Act.
             var calculator = new Calculator();
             calculator.PressDisplay(value1);
@@ -55,8 +61,76 @@ namespace CalculatorLibTests
             calculator.PressEnter();
             var actual = calculator.Display;
             // Assert.
-            var expected = 3;
+            var expected = -2.9;
             Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        [TestCategory("InputData")]
+        public void NoInputData()
+        {
+            // Arrange.
+
+            // Act.
+            var calculator = new Calculator();
+            var actual = calculator.Display;
+            // Assert.
+            var expected = 0;
+            Assert.AreEqual(expected, actual);
+        }
+
+        [TestMethod]
+        [TestCategory("RangePermissibleValue")]
+        [ExpectedException(typeof(OutOfRangeException))]
+        public void PressPlusMinimumDoubleAndSomeItems()
+        {
+            // Arrange. 
+            var value1 = double.MinValue;
+            var value2 = int.MinValue;
+            // Act. 
+            var calculator = new Calculator();
+            calculator.PressDisplay(value1);
+            calculator.PressPlus();
+            calculator.PressDisplay(value2);
+            calculator.PressEnter();
+            // Assert. 
+            Assert.Fail();
+        }
+
+        [TestMethod]
+        [TestCategory("RangePermissibleValue")]
+        [ExpectedException(typeof(OutOfRangeException))]
+        public void PressPlusMaximumDoubleAndSomeItems()
+        {
+            // Arrange. 
+            var value1 = double.MaxValue;
+            var value2 = short.MaxValue;
+            // Act. 
+            var calculator = new Calculator();
+            calculator.PressDisplay(value1);
+            calculator.PressPlus();
+            calculator.PressDisplay(value2);
+            calculator.PressEnter();
+            // Assert. 
+            Assert.Fail();
+        }
+
+        [TestMethod]
+        [TestCategory("RangePermissibleValue")]
+        [ExpectedException(typeof(DivideByZeroException))]
+        public void PressDivideByZero()
+        {
+            // Arrange. 
+            var value1 = 228;
+            var value2 = 0;
+            // Act. 
+            var calculator = new Calculator();
+            calculator.PressDisplay(value1);
+            calculator.PressDivide();
+            calculator.PressDisplay(value2);
+            calculator.PressEnter();
+            // Assert. 
+            Assert.Fail();
         }
 
         [TestMethod]
@@ -98,25 +172,6 @@ namespace CalculatorLibTests
             // Assert.
             var expected = 2;
             Assert.AreEqual(expected, actual);
-        }
-
-        [TestMethod]
-        [TestCategory("InputData")]
-        [ExpectedException(typeof(DivideByZeroException))]
-        public void PressDivideZeroTwoItem()
-        {
-            // Arrange.
-            var value1 = 1;
-            var value2 = 0;
-            // Act.
-            var calculator = new Calculator();
-            calculator.PressDisplay(value1);
-            calculator.PressDivide();
-            calculator.PressDisplay(value2);
-            calculator.PressEnter();
-            var actual = calculator.Display;
-            // Assert.
-            Assert.Fail();
         }
 
         [TestMethod]
