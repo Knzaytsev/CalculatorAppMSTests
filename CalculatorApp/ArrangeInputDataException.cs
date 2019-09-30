@@ -4,7 +4,7 @@ using System.Text;
 
 namespace CalculatorApp
 {
-    public class OutOfRangeException : Exception
+    class ArrangeInputDataException
     {
     }
 }
