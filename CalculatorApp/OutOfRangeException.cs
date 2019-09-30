@@ -4,7 +4,10 @@ using System.Text;
 
 namespace CalculatorApp
 {
-    class OutOfRangeException
+    public class OutOfRangeException : Exception
     {
+        public OutOfRangeException() : base()
+        {
+        }
     }
 }
