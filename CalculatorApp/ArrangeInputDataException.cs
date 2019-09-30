@@ -4,7 +4,8 @@ using System.Text;
 
 namespace CalculatorApp
 {
-    class ArrangeInputDataException
+    public class ArrangeInputDataException : Exception
     {
+        public ArrangeInputDataException() : base() { }
     }
 }

@@ -4,76 +4,124 @@ using System.Text;
 
 namespace CalculatorApp
 {
+    public enum Operation : byte
+    {
+        Null,
+        Display,
+        Press,
+        Enter
+    }
+
     public class Calculator
     {
-        double currentValue;
-        string operation;
-        bool isNew;
-        public double Display { get; set; }
+        private readonly ObservableValue<double> _currentValue;
+        private string _operation;
+        private bool _isNew;
+        private double _newValue;
+
+        public double CurrentValue
+        {
+            get => _currentValue.Value;
+            set
+            {
+                _lastOperation.Value = Operation.Display;
+                _currentValue.Value = value;
+            }
+        }
+
+        private readonly ObservableValue<Operation> _lastOperation;
 
         public Calculator()
         {
-            currentValue = 0;
-            operation = "=";
-            isNew = false;
-            Display = 0;
+            _lastOperation = new ObservableValue<Operation>(Operation.Null);
+            _lastOperation.Changing += lastOperation_Changing;
+            _currentValue = new ObservableValue<double>(0);
+            _currentValue.Changed += currentValue_Changed;
+            _operation = "=";
+            _isNew = false;
+            CurrentValue = 0;
+            _newValue = 0;
         }
+
+        private void lastOperation_Changing(object sender, ObservableValue<Operation>.ChangingEventArgs e)
+        {
+            if (e.OldValue.Equals(e.NewValue))
+            {
+                throw new ArrangeInputDataException();
+            }
+        }
+
+        private void currentValue_Changed(object sender, ObservableValue<double>.ChangedEventArgs e)
+        {
+            if (double.IsInfinity((double)e.Value))
+            {
+                throw new OutOfRangeException();
+            }
+        }
+
         public void PressEnter()
         {
-            operation = "=";
+            _lastOperation.Value = Operation.Enter;
+            _operation = "=";
             Calculate();
         }
+
         public void PressDisplay(double value)
         {
-            if (isNew)
+            _newValue = value;
+            if (_isNew)
             {
-                Display = value;
                 Calculate();
             }
             else
             {
-                currentValue = value;
+                CurrentValue = _newValue;
             }
-            isNew = true;
+            _isNew = true;
         }
+
         public void PressPlus()
         {
-            operation = "+";
+            _lastOperation.Value = Operation.Press;
+            _operation = "+";
         }
+
         public void PressMinus()
         {
-            operation = "-";
+            _lastOperation.Value = Operation.Press;
+            _operation = "-";
         }
+
         public void PressMultiply()
         {
-            operation = "*";
+            _lastOperation.Value = Operation.Press;
+            _operation = "*";
         }
+
         public void PressDivide()
         {
-            operation = "/";
+            _lastOperation.Value = Operation.Press;
+            _operation = "/";
         }
+
         private void Calculate()
         {
-            switch (operation)
+            switch (_operation)
             {
                 case "+":
-                    _plus();
+                    Plus();
                     break;
 
                 case "-":
-                    _minus();
+                    Minus();
                     break;
 
                 case "*":
-                    _multiply();
+                    Multiply();
                     break;
 
                 case "/":
-                    _divide();
-                    break;
-
-                case "=":
-                    _enter();
+                    Divide();
                     break;
 
                 default:
@@ -81,29 +129,28 @@ namespace CalculatorApp
             }
         }
 
-        private void _plus()
+        private void Plus()
         {
-            currentValue += Display;
+            CurrentValue += _newValue;
         }
 
-        private void _minus()
+        private void Minus()
         {
-            currentValue -= Display;
+            CurrentValue -= _newValue;
         }
 
-        private void _multiply()
+        private void Multiply()
         {
-            currentValue *= Display;
+            CurrentValue *= _newValue;
         }
 
-        private void _divide()
+        private void Divide()
         {
-            currentValue /= Display;
-        }
-
-        private void _enter()
-        {
-            Display = currentValue;
+            if (_newValue.Equals(0))
+            {
+                throw new DivideByZeroException();
+            }
+            CurrentValue /= _newValue;
         }
     }
 }

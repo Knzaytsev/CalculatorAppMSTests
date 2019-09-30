@@ -21,7 +21,7 @@ namespace CalculatorLibTests
             // Act. 
             Calculator calculator = new Calculator();
             calculator.PressDisplay(value);
-            var actual = calculator.Display;
+            var actual = calculator.CurrentValue;
 
             // Assert. 
             Assert.AreEqual(expected, actual);
@@ -68,7 +68,7 @@ namespace CalculatorLibTests
             calculator.PressPlus();
             calculator.PressDisplay(value2);
             calculator.PressEnter();
-            var actual = calculator.Display;
+            var actual = calculator.CurrentValue;
             // Assert.
             var expected = -2.9;
             Assert.AreEqual(expected, actual);
@@ -87,7 +87,7 @@ namespace CalculatorLibTests
             calculator.PressMultiply();
             calculator.PressDisplay(value2);
             calculator.PressEnter();
-            var actual = calculator.Display;
+            var actual = calculator.CurrentValue;
             // Assert.
             var expected = -970520.5;
             Assert.AreEqual(expected, actual);
@@ -116,7 +116,7 @@ namespace CalculatorLibTests
             calculator.PressDisplay(value5);
             calculator.PressEnter();
             calculator.PressEnter();
-            var actual = calculator.Display;
+            var actual = calculator.CurrentValue;
             // Assert.
             var expected = 133;
             Assert.AreEqual(expected, actual);
@@ -130,7 +130,7 @@ namespace CalculatorLibTests
 
             // Act.
             var calculator = new Calculator();
-            var actual = calculator.Display;
+            var actual = calculator.CurrentValue;
             // Assert.
             var expected = 0;
             Assert.AreEqual(expected, actual);
@@ -163,7 +163,7 @@ namespace CalculatorLibTests
             calculator.PressMinus();
             calculator.PressDisplay(value2);
             calculator.PressEnter();
-            var actual = calculator.Display;
+            var actual = calculator.CurrentValue;
             // Assert.
             var expected = 0;
             Assert.AreEqual(expected, actual);
@@ -240,7 +240,7 @@ namespace CalculatorLibTests
             // Act. 
             Calculator calculator = new Calculator();
             calculator.PressDisplay(value);
-            var actual = calculator.Display;
+            var actual = calculator.CurrentValue;
 
             // Assert. 
             var expected = 9;
@@ -260,7 +260,7 @@ namespace CalculatorLibTests
                 calculator.PressDisplay(item);
                 calculator.PressPlus();
             }
-            var actual = calculator.Display;
+            var actual = calculator.CurrentValue;
             // Assert.
             var expected = 55;
             Assert.AreEqual(expected, actual);
