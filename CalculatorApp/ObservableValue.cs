@@ -30,8 +30,19 @@ namespace CalculatorApp
             }
         }
 
+        public class NoChangingEventArgs : EventArgs
+        {
+            public T Value { get; }
+
+            public NoChangingEventArgs(T value)
+            {
+                Value = value;
+            }
+        }
+
         public event EventHandler<ChangingEventArgs> Changing;
         public event EventHandler<ChangedEventArgs> Changed;
+        public event EventHandler<NoChangingEventArgs> NoChanging;
 
         protected T _value;
 
@@ -40,8 +51,10 @@ namespace CalculatorApp
             get => _value;
             set
             {
-                if(_value.Equals(value))
+                
+                if (_value.Equals(value))
                 {
+                    OnNoChanging(new NoChangingEventArgs(_value));
                     return;
                 }
                 ChangingEventArgs e = new ChangingEventArgs(_value, value);
@@ -71,6 +84,12 @@ namespace CalculatorApp
         protected virtual void OnChanged(ChangedEventArgs e)
         {
             EventHandler<ChangedEventArgs> handler = Changed;
+            handler?.Invoke(this, e);
+        }
+
+        protected virtual void OnNoChanging(NoChangingEventArgs e)
+        {
+            EventHandler<NoChangingEventArgs> handler = NoChanging;
             handler?.Invoke(this, e);
         }
     }

@@ -8,8 +8,7 @@ namespace CalculatorApp
     {
         Null,
         Display,
-        Press,
-        Enter
+        Press
     }
 
     public class Calculator
@@ -18,23 +17,19 @@ namespace CalculatorApp
         private string _operation;
         private bool _isNew;
         private double _newValue;
+        private readonly ObservableValue<Operation> _lastOperation;
 
         public double CurrentValue
         {
             get => _currentValue.Value;
-            set
-            {
-                _lastOperation.Value = Operation.Display;
-                _currentValue.Value = value;
-            }
+            set => _currentValue.Value = value;
         }
 
-        private readonly ObservableValue<Operation> _lastOperation;
 
         public Calculator()
         {
             _lastOperation = new ObservableValue<Operation>(Operation.Null);
-            _lastOperation.Changing += lastOperation_Changing;
+            _lastOperation.NoChanging += lastOperation_NoChanging;
             _currentValue = new ObservableValue<double>(0);
             _currentValue.Changed += currentValue_Changed;
             _operation = "=";
@@ -43,17 +38,14 @@ namespace CalculatorApp
             _newValue = 0;
         }
 
-        private void lastOperation_Changing(object sender, ObservableValue<Operation>.ChangingEventArgs e)
+        private void lastOperation_NoChanging(object sender, ObservableValue<Operation>.NoChangingEventArgs e)
         {
-            if (e.OldValue.Equals(e.NewValue))
-            {
-                throw new ArrangeInputDataException();
-            }
+            throw new ArrangeInputDataException();
         }
 
         private void currentValue_Changed(object sender, ObservableValue<double>.ChangedEventArgs e)
         {
-            if (double.IsInfinity((double)e.Value))
+            if (double.IsInfinity(e.Value))
             {
                 throw new OutOfRangeException();
             }
@@ -61,13 +53,14 @@ namespace CalculatorApp
 
         public void PressEnter()
         {
-            _lastOperation.Value = Operation.Enter;
+            _lastOperation.Value = Operation.Press;
             _operation = "=";
             Calculate();
         }
 
         public void PressDisplay(double value)
         {
+            _lastOperation.Value = Operation.Display;
             _newValue = value;
             if (_isNew)
             {
@@ -82,24 +75,28 @@ namespace CalculatorApp
 
         public void PressPlus()
         {
+            TestInputBeforeOperation();
             _lastOperation.Value = Operation.Press;
             _operation = "+";
         }
 
         public void PressMinus()
         {
+            TestInputBeforeOperation();
             _lastOperation.Value = Operation.Press;
             _operation = "-";
         }
 
         public void PressMultiply()
         {
+            TestInputBeforeOperation();
             _lastOperation.Value = Operation.Press;
             _operation = "*";
         }
 
         public void PressDivide()
         {
+            TestInputBeforeOperation();
             _lastOperation.Value = Operation.Press;
             _operation = "/";
         }
@@ -124,8 +121,7 @@ namespace CalculatorApp
                     Divide();
                     break;
 
-                default:
-                    break;
+                default: break;
             }
         }
 
@@ -151,6 +147,14 @@ namespace CalculatorApp
                 throw new DivideByZeroException();
             }
             CurrentValue /= _newValue;
+        }
+
+        private void TestInputBeforeOperation()
+        {
+            if (_isNew == false)
+            {
+                throw new ArrangeInputDataException();
+            }
         }
     }
 }

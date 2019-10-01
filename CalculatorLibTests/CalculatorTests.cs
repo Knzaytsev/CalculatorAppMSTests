@@ -115,7 +115,6 @@ namespace CalculatorLibTests
             calculator.PressDivide();
             calculator.PressDisplay(value5);
             calculator.PressEnter();
-            calculator.PressEnter();
             var actual = calculator.CurrentValue;
             // Assert.
             var expected = 133;
@@ -176,7 +175,7 @@ namespace CalculatorLibTests
         {
             // Arrange. 
             var value1 = double.MinValue;
-            var value2 = int.MinValue;
+            var value2 = double.MinValue;
             // Act. 
             var calculator = new Calculator();
             calculator.PressDisplay(value1);
@@ -194,9 +193,9 @@ namespace CalculatorLibTests
         {
             // Arrange. 
             var value1 = double.MaxValue;
-            var value2 = short.MaxValue;
+            var value2 = double.MaxValue;
             // Act. 
-            var calculator = new Calculator();
+             var calculator = new Calculator();
             calculator.PressDisplay(value1);
             calculator.PressPlus();
             calculator.PressDisplay(value2);
