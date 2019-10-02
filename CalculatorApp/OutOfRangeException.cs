@@ -6,5 +6,8 @@ namespace CalculatorApp
 {
     public class OutOfRangeException : Exception
     {
+        public OutOfRangeException() : base()
+        {
+        }
     }
 }

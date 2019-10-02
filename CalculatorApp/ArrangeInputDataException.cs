@@ -6,5 +6,6 @@ namespace CalculatorApp
 {
     public class ArrangeInputDataException : Exception
     {
+        public ArrangeInputDataException() : base() { }
     }
 }
